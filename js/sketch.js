@@ -1,53 +1,127 @@
-let table;
+let timeUse;
+let date;
+
+let dateArray = [];
+let ps4Array = [];
+let pcArray = [];
+let nsArray = [];
+let iphoneArray = [];
+let padArray = [];
+
+let canvas;
 
 function preload(){
-table = loadTable ("assets/data.csv","csv","header");
+  timeUse = loadTable('js/timeUse.csv', 'csv', 'header');
+}
+
+function setup(){
+  canvas = createCanvas(windowWidth, windowHeight);
+  canvas.id("myChart");
+
+  for (var i = 0; i < timeUse.getRowCount(); i++){
+
+    date = timeUse.getString(i, 'Date');
+
+    dateArray.push(date);
+    ps4Array.push(timeUse.getNum(i, 'PS4'));
+    pcArray.push(timeUse.getNum(i, 'PC'));
+    nsArray.push(timeUse.getNum(i, 'SWITCH'));
+    iphoneArray.push(timeUse.getNum(i, 'IPHONE'));
+    padArray.push(timeUse.getNum(i, 'IPAD'));
+
+}
+loadGraph();
+
+}
+
+function draw(){
 
 }
 
 
+function loadGraph(){
+  var ctx = document.getElementById('myChart').getContext('2d');
 
-function setup() {
-  // put setup code here
-  createCanvas(displayWidth,displayHeight);
-  background(220);
-  console.log(table);
-  textAlign(CENTER);
+  var mixedChart = new Chart(ctx, {
+      type: 'line',
+      data: {
 
-  for(let r = 0; r<table.getRowCount();r++){
-    const name = table.getString(r,"Date");
-    const ps4 = table.getNum(r,"PS4");
-    const pc = table.getNum(r,"PC");
-    const iphone = table.getNum(r,"IPHONE");
-    const sn = table.getNum(r,"SWITCH");
-    const pad = table.getNum(r,"IPAD");
-    //console.log(name);
-    const x = random(0,displayWidth-200);
-    const y = random(0,displayHeight-200);
-    const size = map(ps4,0,345,10,100);
-    const size1 = map(pc,0,345,10,100);
-    const size2 = map(iphone,0,345,10,100);
-    const size3 = map(sn,0,345,10,100);
-    const size4 = map(pad,0,345,10,100);
-    fill(180,80,10);
-    circle(x,y,size);
-    fill(50,200,50);
-    rect(x,y,size1);
-    fill(90,10,180);
-    circle(x,y,size2);
-    fill(180,90,150);
-    rect(x,y,size3);
-    fill(200,180,50);
-    circle(x,y,size4);
+        datasets: [{
+           label: 'PS4',
+          data: ps4Array,
 
-    fill(0);
-    text(name,x,y + size / 2+5);
+         backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+         fill:false,
+          order: 1
+         }, {
+           label: 'PC',
+           data: pcArray,
+           type: 'line',
+           borderColor: 'rgba(255, 222, 20, 1)',
 
-  }
-}
+          borderWidth: 1,
+           fill: false,
+          order: 2
+       }, {
+         label: 'Switch',
+         data: nsArray,
+         type: 'line',
+         borderColor: 'rgba(70, 180, 165, 1)',
 
-function draw() {
-  // put drawing code here
+        borderWidth: 1,
+         fill: false,
+        order: 3
+     }, {
+       label: 'iphone',
+       data: iphoneArray,
+       type: 'line',
+       borderColor: 'rgba(255, 99, 255, 1)',
+
+      borderWidth: 1,
+       fill: false,
+      order: 4
+   }, {
+     label: 'ipad',
+     data: padArray,
+     type: 'line',
+     borderColor: 'rgba(132, 99, 255, 1)',
+
+    borderWidth: 1,
+     fill: false,
+    order: 5
+ }],
+         labels: dateArray
+       },
+       options: {
+
+         scales: {
+           xAxes: [{ stacked: true }],
+           yAxes: [{ stacked: true }]
+         }
+       }
+
+     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
